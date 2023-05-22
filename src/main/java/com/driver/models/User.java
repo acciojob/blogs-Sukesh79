@@ -8,6 +8,7 @@ import java.util.*;
 @Table(name = "user")
 public class User{
 
+    public User(){}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

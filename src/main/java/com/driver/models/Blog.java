@@ -19,7 +19,7 @@ public class Blog{
 
     @Column(name = "date")
     @CreationTimestamp
-    private String date;
+    private Date date;
 
     @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
     List<Image> imageList = new ArrayList<>();
@@ -57,11 +57,11 @@ public class Blog{
         this.content = content;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
