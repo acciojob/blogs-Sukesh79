@@ -27,7 +27,11 @@ public class BlogService {
         User user = optionalUser.get();
 
         Blog blog = new Blog(title, content);
-        user.getBlogList().add(blog);
+        blog.setUser(user);
+
+        List<Blog> blogList= user.getBlogList();
+        blogList.add(blog);
+        user.setBlogList(blogList);
 
         User savedUser = userRepository1.save(user);
 
