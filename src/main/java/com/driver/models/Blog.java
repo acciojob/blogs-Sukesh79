@@ -3,35 +3,37 @@ package com.driver.models;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import  java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 @Entity
-@Table(name = "blog")
+@Table(name = "BlogInfo")
 public class Blog{
-    public Blog(){}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-
-    @Column(name = "title")
     private String title;
-    @Column(name = "content")
     private String content;
 
-    @Column(name = "date")
     @CreationTimestamp
-    private Date date;
-
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL)
-    List<Image> imageList = new ArrayList<>();
+    private Date pubDate;
 
     @ManyToOne
     @JoinColumn
-    User user;
+    private User user;
 
-    public Blog(String title, String content) {
+    @OneToMany(mappedBy = "blog",cascade = CascadeType.ALL)
+    private List<Image> imageList=new ArrayList<>();
+
+    public Blog() {
+    }
+
+    public Blog(String title, String content, Date pubDate, User user) {
         this.title = title;
         this.content = content;
+        this.pubDate = pubDate;
+        this.user = user;
     }
 
     public int getId() {
@@ -58,20 +60,12 @@ public class Blog{
         this.content = content;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getPubDate() {
+        return pubDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public List<Image> getImageList() {
-        return imageList;
-    }
-
-    public void setImageList(List<Image> imageList) {
-        this.imageList = imageList;
+    public void setPubDate(Date pubDate) {
+        this.pubDate = pubDate;
     }
 
     public User getUser() {
@@ -80,5 +74,13 @@ public class Blog{
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
     }
 }

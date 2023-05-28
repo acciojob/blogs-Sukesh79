@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -17,16 +16,19 @@ public class ImageService {
     ImageRepository imageRepository2;
 
     public Image addImage(Integer blogId, String description, String dimensions){
-        Image image = new Image(dimensions, description);
-        Optional<Blog> optionalBlog = blogRepository2.findById(blogId);
-
-        Blog blog = optionalBlog.get();
+        //add an image to the blog
+        Blog blog=blogRepository2.findById(blogId).get();
+        Image image=new Image();
+        image.setDescription(description);
+        image.setDimensions(dimensions);
         image.setBlog(blog);
 
-        Blog savedBlog = blogRepository2.save(blog);
+        //Adding in blog list
+        List<Image> imageList=blog.getImageList();
+        imageList.add(image);
 
-        Image savedImage = savedBlog.getImageList().get(savedBlog.getImageList().size() -1);
-        return savedImage;
+        blogRepository2.save(blog);
+        return image;
     }
 
     public void deleteImage(Integer id){
@@ -35,17 +37,26 @@ public class ImageService {
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
         //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
-        Optional<Image> optionalImage = imageRepository2.findById(id);
-        Image image = optionalImage.get();
+        //countImagesInScreen: given an image id and a screen size, find the number of images of given size
+        // that can fit completely into the screen with given dimensions.
+        // For example, a screen with dimensions 4X4, can completely fit 4 images, each having dimensions 2X2.
+        int count=0;
+        String[] dimarr=screenDimensions.split("X");
+        Image image=imageRepository2.findById(id).get();
+        String dimensionOfImage=image.getDimensions();
+        String[] imgarr=dimensionOfImage.split("X");
+        int imgx=Integer.parseInt(imgarr[0]);
+        int imgy=Integer.parseInt(imgarr[1]);
 
-        String imageDimensions = image.getDimensions();
-        String[] imageArr = imageDimensions.split("X");
+        int dimx=Integer.parseInt(dimarr[0]);
+        int dimy=Integer.parseInt(dimarr[1]);
 
-        String[] screenArr = screenDimensions.split("X");
+        //4X4 = 4/2*4/2 = 4 images
+        int countx=dimx/imgx;
+        int county=dimy/imgy;
+        count=countx*county;
 
-        int screenArea = Integer.parseInt(screenArr[0]) * Integer.parseInt(screenArr[1]);
-        int imageArea = Integer.parseInt(imageArr[0]) * Integer.parseInt(imageArr[1]);
+        return count;
 
-        return screenArea/imageArea;
     }
 }

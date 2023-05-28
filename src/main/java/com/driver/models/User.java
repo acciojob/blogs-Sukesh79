@@ -1,38 +1,33 @@
 package com.driver.models;
 
-import org.springframework.boot.context.properties.bind.DefaultValue;
-
 import javax.persistence.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Table(name = "user")
+@Table(name = "UserInfo")
 public class User{
 
-    public User(){}
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private int id;
-    @Column(name = "username")
+
     private String username;
-
-    @Column(name = "password")
     private String password;
-
-    @Column(name = "first_name")
     private String firstName;
-
-    @Column(name = "last_name")
     private String lastName;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    List<Blog> blogList = new ArrayList<>();
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Blog> blogList=new ArrayList<>();
 
-    public User(String username, String password, String firstName, String lastName) {
+    public User() {
+    }
+
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.firstName = "test";
+        this.lastName = "test";
     }
 
     public int getId() {
@@ -47,8 +42,8 @@ public class User{
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setUsername(String userName) {
+        this.username = userName;
     }
 
     public String getPassword() {
